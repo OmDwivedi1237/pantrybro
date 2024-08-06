@@ -1,61 +1,93 @@
-"use client"
-
-import { useState } from 'react';
-import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import { auth } from "@/app/firebase/config"; 
+"use client";
+import React, { useState } from "react";
+import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { auth, googleProvider } from "@/app/firebase/config"; // Adjust the path as needed
+import { Input } from "@/components/input"; // Adjust the path as needed
+import { Label } from "@/components/label"; // Adjust the path as needed
+import { signInWithPopup } from "firebase/auth";
+import { useRouter } from "next/navigation"; // Adjust import if using Next.js routing
 
 const SignIn = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [signInWithEmailAndPassword, user, loading, error] = useSignInWithEmailAndPassword(auth);
+  const router = useRouter();
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleEmailSignIn = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const userCredential = await signInWithEmailAndPassword(email, password);
-      console.log({ userCredential });
+      await signInWithEmailAndPassword(email, password);
     } catch (e) {
       console.error(e);
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+
+      const user = result.user;
+      const credential = googleProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+
+      console.log("User signed in with Google:", user);
+
+      router.push("/dashboard");
+
+    } catch (error) {
+      console.error("Google sign-in error:", error);
+    }
+  };
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-zinc-950 text-gray-100">
-      <div className="w-full max-w-md p-8 space-y-6 bg-zinc-900 rounded-lg shadow-md">
-        <h1 className="text-2xl font-semibold text-purple-500">Sign In</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="flex flex-col items-center justify-center h-screen bg-zinc-950">
+      <div className="max-w-sm w-full p-6 bg-white dark:bg-zinc-800 rounded-lg shadow-lg">
+        <div className="flex justify-center mb-4">
+          <img src="/logo.png" alt="Logo" className="h-12" /> {/* Replace with your logo */}
+        </div>
+        <h1 className="text-2xl font-bold mb-4 text-center text-purple-500">Sign In</h1>
+        <form onSubmit={handleEmailSignIn} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-300">Email</label>
-            <input
-              type="email"
+            <Label htmlFor="email" className="text-purple-300">Email</Label>
+            <Input
               id="email"
+              type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 mt-1 text-gray-900 bg-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
               required
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-300">Password</label>
-            <input
-              type="password"
+            <Label htmlFor="password" className="text-purple-300">Password</Label>
+            <Input
               id="password"
+              type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 mt-1 text-gray-900 bg-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
               required
             />
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 font-semibold text-white bg-purple-500 rounded-md hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full py-2 px-4 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition"
             disabled={loading}
           >
-            {loading ? 'Signing In...' : 'Sign In'}
+            {loading ? "Signing In..." : "Sign In"}
           </button>
-          {error && <p className="text-red-500">{error.message}</p>}
+          {error && <p className="text-red-500 text-center mt-2">{error.message}</p>}
         </form>
+        <div className="flex flex-col items-center mt-4">
+          <p className="text-sm mb-2 text-purple-300">Or sign in with</p>
+          <Input
+            type="button"
+            value="    Google    "
+            onClick={handleGoogleSignIn}
+            className="w-full py-2 px-4 bg-red-500 text-white rounded-md transition cursor-pointer"
+          />
+        </div>
+        <div className="text-center mt-4">
+          <p className="text-sm text-purple-300">Don't have an account? <a href="/sign-up" className="text-purple-500 hover:underline">Sign Up</a></p>
+        </div>
       </div>
     </div>
   );

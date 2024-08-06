@@ -10,7 +10,7 @@ export function LampDemo() {
         {/* Gradient text above the lamp */}
         <div className="absolute top-[-20rem] z-60 text-center">
           <h2 className="text-6xl font-extrabold bg-gradient-to-br from-purple-400 via-purple-600 to-purple-800 bg-clip-text text-transparent">
-            Pantry Bro
+            Panty Bro
           </h2>
         </div>
         <motion.h1
