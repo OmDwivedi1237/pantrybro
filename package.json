@@ -9,14 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-label": "^2.1.0",
     "@tabler/icons-react": "^3.11.0",
     "clsx": "^2.1.1",
     "firebase": "^10.12.5",
     "framer-motion": "^11.3.21",
     "next": "14.2.5",
-    "react": "^18",
-    "react-dom": "^18",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-firebase-hooks": "^5.1.1",
     "tailwind-merge": "^2.4.0"
   },
@@ -30,5 +31,9 @@
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
-  }
+  },
+  "description": "pantry tracker",
+  "main": "firebase.js",
+  "author": "",
+  "license": "ISC"
 }
