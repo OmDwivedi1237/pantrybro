@@ -28,7 +28,6 @@ export default function Home() {
           </p>
         </section>
 
-        {/* Replace the old BentoGrid with BentoGridThirdDemo */}
         <BentoGridThirdDemo />
       </div>
 
