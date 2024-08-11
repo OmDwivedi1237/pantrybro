@@ -29,18 +29,15 @@ export const FloatingNav = ({
   const [user] = useAuthState(auth);
 
   useMotionValueEvent(scrollY, "change", (current) => {
-    // Check if current is not undefined and is a number
     if (typeof current === "number") {
       let direction = current - previousScrollY.current;
 
-      // Update visibility based on scroll direction
       if (current < 50) {
-        setVisible(true); // Show the nav bar when at the top
+        setVisible(true);
       } else {
-        setVisible(direction < 0); // Show on scroll up, hide on scroll down
+        setVisible(direction < 0);
       }
 
-      // Update the previous scroll position
       previousScrollY.current = current;
     }
   });
@@ -48,7 +45,7 @@ export const FloatingNav = ({
   const handleSignOut = async () => {
     try {
       await signOut(auth);
-      // Optionally redirect or perform other actions after sign-out
+
     } catch (error) {
       console.error("Sign-out error:", error);
     }

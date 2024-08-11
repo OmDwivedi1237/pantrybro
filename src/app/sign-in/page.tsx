@@ -1,10 +1,11 @@
-"use client";
-import React, { useState } from "react";
+'use client';
+
+import React, { useState, useEffect } from "react";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth, googleProvider } from "@/app/firebase/config"; // Adjust the path as needed
 import { Input } from "@/components/input"; // Adjust the path as needed
 import { Label } from "@/components/label"; // Adjust the path as needed
-import { signInWithPopup } from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useRouter } from "next/navigation"; // Adjust import if using Next.js routing
 
 const SignIn = () => {
@@ -25,20 +26,18 @@ const SignIn = () => {
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      
-
-      const user = result.user;
-      const credential = googleProviderromResult(result);
-      const token = credential.accessToken;
-
-      console.log("User signed in with Google:", user);
-
-      router.push("/dashboard");
-
+      console.log("User signed in with Google:", result.user);
+      router.push("/user-init"); // Redirect after successful sign-in
     } catch (error) {
       console.error("Google sign-in error:", error);
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      router.push("/user-init"); // Redirect after successful sign-in with email
+    }
+  }, [user, router]);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-zinc-950">
